@@ -8,6 +8,8 @@ class LoginPage():
     def __init__(self, driver):
         self.driver = driver
 
+    #locators
+
     def login(self, username, password):
         login_link = self.driver.find_element(By.LINK_TEXT, 'Login')
         login_link.click()
