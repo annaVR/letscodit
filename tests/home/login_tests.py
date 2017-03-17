@@ -1,30 +1,30 @@
 __author__ = 'anna'
 
 from selenium import webdriver
-from selenium.webdriver.common.by import By
 from pages.home.login_page import LoginPage
 import unittest
+import pytest
 
+@pytest.mark.usefulfixture('module_set_up_level_to_test_a_class', 'method_set_up')
 class LoginTests(unittest.TestCase):
 
-    def test_valid_login(self):
-        url = 'https://letskodeit.teachable.com/'
-        driver = webdriver.Firefox()
-        driver.maximize_window()
-        driver.implicitly_wait(3)
-        driver.get(url)
 
-        lp = LoginPage(driver)
-        lp.login('test@email.com', 'abcabc')
+    @pytest.fixture(autouse=True)
+    def ClassSetup(self, module_set_up_level_to_test_a_class):
+        self.lp = LoginPage(self.driver)
+
+    @pytest.mark.run(order=2)
+    def test_valid_login(self):
+        self.lp.login('test@email.com', 'abcabc')
 
         # to verify that login successful
-        user_icon = driver.find_element(By.XPATH, "//div[@id='navbar']//span[text()='User Settings']")
-        driver.quit()
+        result = self.lp.verify_login_success()
+        assert result is True
+        result2 = self.lp.verity_title()
+        assert result2 is True
 
-        if user_icon:
-            print('Login successful')
-        else:
-            print('Login failed')
-
-
-
+    @pytest.mark.run(order=1)
+    def test_login_empty_email_empty_password(self):
+        self.lp.login()
+        result = self.lp.verify_login_failed()
+        assert result is True

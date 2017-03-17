@@ -1,24 +1,58 @@
 __author__ = 'anna'
 
-from selenium.webdriver.common.by import By
+from base.selenium_driver import SeleniumDriver
+from utilities.custom_logger import CustomLogger
+import logging
 
 
-class LoginPage():
+class LoginPage(SeleniumDriver):
+    # we override log locally to get the LoginPage name in logfile
+    log = CustomLogger(logging.DEBUG)
 
     def __init__(self, driver):
+        super().__init__(driver)
         self.driver = driver
 
     #locators
+    _login_link = 'Login'
+    _email_field = 'user_email'
+    _password_field = 'user_password'
+    _login_button = 'commit'
 
-    def login(self, username, password):
-        login_link = self.driver.find_element(By.LINK_TEXT, 'Login')
-        login_link.click()
+    #actions on the elements
+    def click_login_link(self):
+        self.element_click(self._login_link, 'link')
 
-        email_field = self.driver.find_element(By.ID, 'user_email')
-        email_field.send_keys(username)
+    def enter_email(self, email):
+        self.sendkeys(self._email_field, 'id', email)
 
-        password_field = self.driver.find_element(By.ID, 'user_password')
-        password_field.send_keys(password)
+    def enter_password(self, password):
+        self.sendkeys(self._password_field, 'id', password)
+    def click_login_button(self):
+        self.element_click(self._login_button, 'name')
 
-        login_button = self.driver.find_element(By.NAME, 'commit')
-        login_button.click()
+    #main
+    #login has optional parameters (to login with empty credentials)
+    def login(self, email='', password=''):
+        self.click_login_link()
+        self.enter_email(email)
+        self.enter_password(password)
+        self.click_login_button()
+
+        # verify that test is successful if certain element is present on the page
+    def verify_login_success(self):
+        user_icon = self.is_element_present('XPATH', "//div[@id='navbar']//span[text()='User Settings']")
+        return user_icon
+
+    def verify_login_failed(self):
+        failure_message = self.is_element_present('xpath', "//div[contains(text(), 'Invalid email or password')]")
+        return failure_message
+
+    def verity_title(self):
+        if "Let's Kode It" in self.get_title():
+            return True
+        else:
+            return False
+
+
+
