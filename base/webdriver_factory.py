@@ -16,7 +16,7 @@ class WebDriverFactory():
         #     driver = webdriver.Ie()
         #     print('Running on IE.')
         if self.browser == 'chrome':
-            driver_location = '/home/anna/bin/chromedriver'
+            driver_location = '/home/anna/bin/chromedriver' # for mac: /Users/anna/bin/chromedriver
             os.environ['webdriver.chrome.driver'] = driver_location
             driver = webdriver.Chrome(driver_location)
             print('Running on Chrome.')
