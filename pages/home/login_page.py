@@ -1,13 +1,13 @@
 __author__ = 'anna'
 
 from base.selenium_driver import SeleniumDriver
-from utilities.custom_logger import CustomLogger
+from utilities.custom_logger import custom_logger
 import logging
 
 
 class LoginPage(SeleniumDriver):
     # we override log locally to get the LoginPage name in logfile
-    log = CustomLogger(logging.DEBUG)
+    log = custom_logger(logging.DEBUG)
 
     def __init__(self, driver):
         super().__init__(driver)
@@ -40,16 +40,18 @@ class LoginPage(SeleniumDriver):
         self.click_login_button()
 
         # verify that test is successful if certain element is present on the page
-    def verify_login_success(self):
+        # will return True or False
+    def verify_login_successful(self):
         user_icon = self.is_element_present('XPATH', "//div[@id='navbar']//span[text()='User Settings']")
         return user_icon
 
+        # will return True or False
     def verify_login_failed(self):
         failure_message = self.is_element_present('xpath', "//div[contains(text(), 'Invalid email or password')]")
         return failure_message
 
-    def verity_title(self):
-        if "Let's Kode It" in self.get_title():
+    def verify_title(self):
+        if "Google" in self.get_title():
             return True
         else:
             return False

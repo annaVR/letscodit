@@ -24,7 +24,7 @@ class WebDriverFactory():
             driver = webdriver.Firefox()
             print('Running on Firefox.')
 
-        driver.implicitly_wait(3)
+        driver.implicitly_wait(4)
         driver.maximize_window()
         driver.get(url)
         return driver

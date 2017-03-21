@@ -3,7 +3,7 @@ __author__ = 'anna'
 import inspect
 import logging
 
-def CustomLogger(log_level=logging.DEBUG):
+def custom_logger(log_level=logging.DEBUG):
     #to explore inspect.stack()
     # stack = (inspect.stack())
     # print(type(stack), len(stack))
@@ -28,7 +28,7 @@ def CustomLogger(log_level=logging.DEBUG):
     return logger
 
 # def some_func(logging_level):
-#     logger = CustomLogger(logging_level)
+#     logger = custom_logger(logging_level)
 #     logger.info('Info message')
 #     logger.warn('Warning message')
 #

@@ -7,15 +7,42 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import *
 from utilities.messages import *
-from utilities.custom_logger import CustomLogger
+from utilities.custom_logger import custom_logger
 import logging
+import time
+import datetime
+import os
 
 class SeleniumDriver():
 
-    log = CustomLogger(logging.DEBUG)
+    log = custom_logger(logging.DEBUG)
 
     def __init__(self, driver):
         self.driver = driver
+
+    def screenshot(self, test_name):
+        """
+        takes screenshot of a current open web page
+        """
+        time_stamp = time.time()
+        time_stamp_string = datetime.datetime.fromtimestamp(time_stamp).strftime('%Y%m%d:%H:%M:%S')
+        file_name = "{}.{}.png".format(test_name, time_stamp_string)
+        relative_screenshot_directory = '../screenshots/'
+        relative_file_path= '{}{}'.format(relative_screenshot_directory, file_name)
+        current_directory = os.path.dirname(__file__)
+        destination_file_path = os.path.join(current_directory, relative_file_path)
+        destination_directory = os.path.join(current_directory, relative_screenshot_directory)
+
+        try:
+            if not os.path.exists(destination_directory):
+                os.makedirs(destination_directory)
+            self.driver.save_screenshot(destination_file_path)
+            self.log.info(screenshot_saved_message(test_name, destination_file_path))
+        except:
+            self.log.error(screenshot_exception_occurred_message(test_name, destination_file_path))
+            print_stack()
+
+
 
     def get_title(self):
         return self.driver.title
@@ -35,7 +62,7 @@ class SeleniumDriver():
         elif locator_type == "link":
             return By.LINK_TEXT
         else:
-            self.log.info(locator_error(locator_type))
+            self.log.info(locator_error_message(locator_type))
         return False
 
     def get_element(self, locator, locator_type="id"):
@@ -52,18 +79,18 @@ class SeleniumDriver():
         try:
             element = self.get_element(locator, locator_type)
             element.click()
-            self.log.info(element_clicked(locator_type, locator))
+            self.log.info(element_clicked_message(locator_type, locator))
         except:
-            self.log.info(element_not_clicked(locator_type, locator))
+            self.log.info(element_not_clicked_message(locator_type, locator))
             self.log.info(print_stack())
 
     def sendkeys(self, locator, locator_type, keys):
         try:
             element = self.get_element(locator, locator_type)
             element.send_keys(keys)
-            self.log.info(element_send_keys(locator_type, locator, keys))
+            self.log.info(element_send_keys_message(locator_type, locator, keys))
         except:
-            self.log.info(element_not_send_keys(locator_type, locator,keys))
+            self.log.info(element_cannot_send_keys_message(locator_type, locator,keys))
             self.log.info(print_stack())
 
 
@@ -82,10 +109,10 @@ class SeleniumDriver():
                                                                                            ElementNotVisibleException,
                                                                                            ElementNotSelectableException])
             element = wait.until(EC.element_to_be_clickable((locator_type, locator)))
-            self.log.info(element_appeared(locator_type, locator))
+            self.log.info(element_appeared_message(locator_type, locator))
             return element
         except:
-            self.log.info(element_not_appeared())
+            self.log.info(element_not_appeared_message())
             self.log.info(print_stack())
 
 
