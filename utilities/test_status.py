@@ -25,7 +25,6 @@ class testStatus(SeleniumDriver):
                 else:
                     self.result_list.append('FAIL')
                     self.log.error(verification_failed_message(test_name))
-                    time.sleep(1)
                     self.screenshot(test_name)
             else:
                 self.result_list.append('FAIL')
