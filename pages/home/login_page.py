@@ -1,11 +1,11 @@
 __author__ = 'anna'
 
-from base.selenium_driver import SeleniumDriver
+from base.base_page import BasePage
 from utilities.custom_logger import custom_logger
 import logging
 
 
-class LoginPage(SeleniumDriver):
+class LoginPage(BasePage):
     # we override log locally to get the LoginPage name in logfile
     log = custom_logger(logging.DEBUG)
 
@@ -28,6 +28,7 @@ class LoginPage(SeleniumDriver):
 
     def enter_password(self, password):
         self.sendkeys(self._password_field, 'id', password)
+
     def click_login_button(self):
         self.element_click(self._login_button, 'name')
 
@@ -50,11 +51,9 @@ class LoginPage(SeleniumDriver):
         failure_message = self.is_element_present('xpath', "//div[contains(text(), 'Invalid email or password')]")
         return failure_message
 
-    def verify_title(self):
-        if "Google" in self.get_title():
-            return True
-        else:
-            return False
+    def verify_login_title(self):
+        return self.verify_page_title('Google')
+
 
 
 

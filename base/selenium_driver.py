@@ -75,45 +75,124 @@ class SeleniumDriver():
             self.log.info(element_not_found_message(by_type, locator))
         return element
 
-    def element_click(self, locator, locator_type='id'):
+    def get_element_list(self, locator, locator_type='id'):
+        elements_list = None
         try:
-            element = self.get_element(locator, locator_type)
+            locator_type = locator_type.lower()
+            by_type = self.get_by_type(locator_type)
+            elements_list = self.driver.find_elements(by_type, locator)
+            self.log.info(elements_list_found_message(locator_type, locator))
+        except:
+            self.log.info(elements_list_not_found_message(locator_type, locator))
+        return elements_list
+
+
+    def element_click(self, locator='', locator_type='id', element=None):
+        try:
+            if locator:
+                element = self.get_element(locator, locator_type)
             element.click()
             self.log.info(element_clicked_message(locator_type, locator))
         except:
             self.log.info(element_not_clicked_message(locator_type, locator))
             self.log.info(print_stack())
 
-    def sendkeys(self, locator, locator_type, keys):
+    def sendkeys(self, locator, locator_type, keys, element=None):
         try:
-            element = self.get_element(locator, locator_type)
+            if locator:
+                element = self.get_element(locator, locator_type)
             element.send_keys(keys)
             self.log.info(element_send_keys_message(locator_type, locator, keys))
         except:
             self.log.info(element_cannot_send_keys_message(locator_type, locator,keys))
             self.log.info(print_stack())
 
+    def get_text(self, locator='', locator_type='id', element=None, info=''):
 
-    def is_element_present(self, locator_type, locator):
         try:
-            element = self.get_element(locator, locator_type)
-            return True
+            if locator: # This means if locator is not empty
+                self.log.debug("In locator condition")
+                element = self.get_element(locator, locator_type)
+            self.log.debug("Before finding text")
+            text = element.text
+            self.log.debug("After finding element, size is: " + str(len(text)))
+            if len(text) == 0:
+                text = element.get_attribute("innerText")
+            if len(text) != 0:
+                self.log.info("Getting text on element :: " + info)
+                self.log.info("The text is :: '" + text + "'")
+                text = text.strip()
         except:
+            self.log.error("Failed to get text on element " + info)
+            print_stack()
+            text = None
+        return text
+
+
+    def is_element_present(self, locator, locator_type, element=None):
+        try:
+            if locator:
+                element = self.get_element(locator, locator_type)
+            if element is not None:
+                self.log.info("Element present. Locator_type: {}, locator: {}.".format(locator_type, locator))
+                return True
+            else:
+                self.log.info("Element not present. Locator_type: {}, locator: {}.".format(locator_type, locator))
+                return False
+        except:
+            self.log.info(element_not_found_message(locator_type, locator))
             return False
 
-    def wait_for_element(self, locator, timeout, poll_frequency,locator_type='id'):
+    def is_element_displayed(self, locator="", locator_type="id", element=None):
+        """
+        NEW METHOD
+        Check if element is displayed
+        Either provide element or a combination of locator and locatorType
+        """
+        is_displayed = False
+        try:
+            if locator:  # This means if locator is not empty
+                element = self.get_element(locator, locator_type)
+            if element is not None:
+                is_displayed = element.is_displayed()
+                self.log.info("Element is displayed. Locator_type: {}, locator: {}.".format(locator_type, locator))
+            else:
+                self.log.info("Element is not displayed. Locator_type: {}, locator: {}.".format(locator_type, locator))
+            return is_displayed
+        except:
+            self.log.info(element_not_found_message(locator_type, locator))
+            return False
+
+
+    def wait_for_element(self, locator, locator_type='id',
+                         timeout=10, poll_frequency=0.5):
+        element = None
         try:
             by_type = self.get_by_type(locator_type)
             self.log.info(waiting_message(locator_type, locator, timeout))
-            wait = WebDriverWait(self.driver, timeout, poll_frequency, ignored_exceptions=[NoSuchElementException,
-                                                                                           ElementNotVisibleException,
-                                                                                           ElementNotSelectableException])
-            element = wait.until(EC.element_to_be_clickable((locator_type, locator)))
+            wait = WebDriverWait(self.driver, timeout=timeout, poll_frequency=poll_frequency,
+                                 ignored_exceptions=[NoSuchElementException,
+                                                     ElementNotVisibleException,
+                                                     ElementNotSelectableException])
+            element = wait.until(EC.element_to_be_clickable((by_type, locator)))
             self.log.info(element_appeared_message(locator_type, locator))
             return element
         except:
-            self.log.info(element_not_appeared_message())
+            self.log.info(element_not_appeared_message(locator_type, locator))
             self.log.info(print_stack())
+        return element
+
+    def web_scroll(self, direction="up"):
+        """
+        NEW METHOD
+        """
+        if direction == "up":
+            # Scroll Up
+            self.driver.execute_script("window.scrollBy(0, -1000);")
+
+        elif direction == "down":
+            # Scroll Down
+            self.driver.execute_script("window.scrollBy(0, 1000);")
 
 
 

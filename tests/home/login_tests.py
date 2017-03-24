@@ -23,8 +23,8 @@ class LoginTests(unittest.TestCase):
 
         # to verify_title - we are verifying false statement title contains 'Google'
         # in order to get False as a result, because we need the first assertion here fail
-        result = self.lp.verify_title()
-        self.test_status.mark(self.lp.verify_title.__name__, result)
+        result = self.lp.verify_login_title()
+        self.test_status.mark(self.lp.verify_login_title.__name__, result)
 
         # to verify that login successful
         self.lp.login('test@email.com', 'abcabc')

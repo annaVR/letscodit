@@ -28,10 +28,18 @@ def waiting_message(locator_type, locator, timeout):
 def locator_error_message(locator_type):
     return 'Locator type {} not correct/ not supported.'.format(locator_type)
 
+#finging elements list
+template_list_default = ' Locator_type: {}, locator: {}'
+
+def elements_list_found_message(locator_type, locator):
+    return 'Elements list found.'+ template_default.format(locator_type, locator)
+def elements_list_not_found_message(locator_type, locator):
+    return 'Elements list not found.' +template_default.format(locator_type, locator)
 
 
 
-#verification
+
+#test verifications
 #info
 def verification_successful_message(test_name):
     return '### {}: VERIFICATION SUCCESSFUL.'.format(test_name)
@@ -57,8 +65,31 @@ def screenshot_exception_occurred_message(test_name, destination_file):
     return '### {}: EXCEPTION OCCURRED when taking screenshot. {}'.format(test_name, destination_file)
 
 
+#title verification
+
+def failed_to_get_page_title_message(funk_name):
+    return '{}: Failed to get page title.'.format(funk_name)
+
+#utility messages
+
+def sleep_message(seconds, message=''):
+    return 'Wait for {} seconds {}.'.format(seconds, message)
+
+def actual_text_message(actual_text):
+    return 'Actual text from application web UI: {}.'.format(actual_text)
+
+def expected_text_message(expected_text):
+    return 'Expected text from application web UI: {}.'.format(expected_text)
 
 
 
 
+
+# generic verifications
+
+def verification_successful_generic_message():
+    return '### VERIFICATION SUCCESSFUL.'
+
+def verification_failed_generic_message():
+    return '### VERIFICATION FAILED.'
 
