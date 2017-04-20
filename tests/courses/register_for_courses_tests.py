@@ -8,7 +8,7 @@ from utilities.test_status import testStatus
 import time
 
 @pytest.mark.usefulfixture('module_set_up_level_to_test_a_class', 'method_set_up')
-class CoursesTest(unittest.TestCase):
+class RegisterCoursesTest(unittest.TestCase):
 
     @pytest.fixture(autouse=True)
     def class_setup(self, module_set_up_level_to_test_a_class):

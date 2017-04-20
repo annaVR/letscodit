@@ -27,25 +27,25 @@ class RegisterForCourses(BasePage):
 
     #element actions
     def enter_course_to_search(self, course_name):
-        self.sendkeys(self._search_box, 'XPATH', course_name)
+        self.sendkeys(locator=self._search_box, locator_type='XPATH', keys=course_name)
 
     def select_course_to_enroll(self, full_course_name):
-        self.element_click(self._course.format(full_course_name), 'XPATH')
+        self.element_click(locator=self._course.format(full_course_name), locator_type='XPATH')
 
     def click_enroll_button(self):
-        self.element_click(self._enroll_button, 'XPATH')
+        self.element_click(locator=self._enroll_button, locator_type='XPATH')
 
     def enter_ccard_number(self, card_number):
-        self.sendkeys(self._ccard_number_field, 'XPATH', card_number)
+        self.sendkeys(locator=self._ccard_number_field, locator_type='XPATH', keys=card_number)
 
     def enter_ccard_exp_date(self, exp_date):
-        self.sendkeys(self._ccard_exp_date_field, 'XPATH',exp_date)
+        self.sendkeys(locator=self._ccard_exp_date_field, locator_type='XPATH', keys=exp_date)
 
     def enter_ccard_cvc(self, cvc):
-        self.sendkeys(self._ccard_cvc_field, 'XPATH', cvc)
+        self.sendkeys(locator=self._ccard_cvc_field, locator_type='XPATH', keys=cvc)
 
     def click_verify_ccard_button(self):
-        self.element_click(self._verify_cc_button, 'XPATH')
+        self.element_click(locator=self._verify_cc_button, locator_type='XPATH')
 
     def enter_credit_card_info(self, card_number='', exp_date='', cvc=''):
         self.enter_ccard_number(card_number)
@@ -61,8 +61,8 @@ class RegisterForCourses(BasePage):
     #negative test. will return True/False
     #we also want to verify that element not only present but displayed on the page(not hidden)
     def verify_card_invalid_error(self):
-        message_element = self.wait_for_element(self._invalid_card_message, timeout= 10,
-                                                poll_frequency=5, locator_type='XPATH')
-        error = self.is_element_displayed(element=message_element)
+        self.wait_for_element(locator=self._invalid_card_message, timeout= 10,
+                                                poll_frequency=1, locator_type='XPATH')
+        error = self.is_element_displayed(locator=self._invalid_card_message, locator_type='XPATH')
         return error
 

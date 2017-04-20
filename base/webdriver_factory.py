@@ -19,12 +19,13 @@ class WebDriverFactory():
             driver_location = '/home/anna/bin/chromedriver' # for mac: /Users/anna/bin/chromedriver
             os.environ['webdriver.chrome.driver'] = driver_location
             driver = webdriver.Chrome(driver_location)
+            driver.set_window_size(3000, 1800)
             print('Running on Chrome.')
         else:
             driver = webdriver.Firefox()
             print('Running on Firefox.')
 
-        driver.implicitly_wait(4)
+        driver.implicitly_wait(6)
         driver.maximize_window()
         driver.get(url)
         return driver

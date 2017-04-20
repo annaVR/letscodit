@@ -1,6 +1,5 @@
 __author__ = 'anna'
 
-from selenium import webdriver
 from pages.home.login_page import LoginPage
 import unittest
 import pytest
@@ -27,13 +26,14 @@ class LoginTests(unittest.TestCase):
         self.test_status.mark(self.lp.verify_login_title.__name__, result)
 
         # to verify that login successful
-        self.lp.login('test@email.com', 'abcabc')
+        self.lp.login(email='test@email.com', password='abcabc')
         result2 = self.lp.verify_login_successful()
         self.test_status.mark_final(self.test_valid_login_and_title.__name__,
                                     self.lp.verify_login_successful.__name__, result2)
 
     @pytest.mark.run(order=1)
     def test_login_empty_email_empty_password(self):
+        self.lp.logout()
         self.lp.login()
         result = self.lp.verify_login_failed()
         self.test_status.mark_final(self.test_login_empty_email_empty_password.__name__,

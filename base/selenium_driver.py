@@ -86,7 +86,8 @@ class SeleniumDriver():
             self.log.info(elements_list_not_found_message(locator_type, locator))
         return elements_list
 
-
+    # do not use element keyword argument - it is not working properly.
+    # use only locator/locator_type kwargs
     def element_click(self, locator='', locator_type='id', element=None):
         try:
             if locator:
@@ -97,7 +98,9 @@ class SeleniumDriver():
             self.log.info(element_not_clicked_message(locator_type, locator))
             self.log.info(print_stack())
 
-    def sendkeys(self, locator, locator_type, keys, element=None):
+     # do not use element keyword argument - it is not working properly.
+    # use only locator/locator_type kwargs
+    def sendkeys(self, keys, locator='', locator_type='id', element=None):
         try:
             if locator:
                 element = self.get_element(locator, locator_type)
@@ -107,6 +110,8 @@ class SeleniumDriver():
             self.log.info(element_cannot_send_keys_message(locator_type, locator,keys))
             self.log.info(print_stack())
 
+     # do not use element keyword argument - it is not working properly.
+    # use only locator/locator_type kwargs
     def get_text(self, locator='', locator_type='id', element=None, info=''):
 
         try:
@@ -128,7 +133,8 @@ class SeleniumDriver():
             text = None
         return text
 
-
+     # do not use element keyword argument - it is not working properly.
+    # use only locator/locator_type kwargs
     def is_element_present(self, locator, locator_type, element=None):
         try:
             if locator:
@@ -143,6 +149,8 @@ class SeleniumDriver():
             self.log.info(element_not_found_message(locator_type, locator))
             return False
 
+     # do not use element keyword argument - it is not working properly.
+    # use only locator/locator_type kwargs
     def is_element_displayed(self, locator="", locator_type="id", element=None):
         """
         NEW METHOD
@@ -163,9 +171,8 @@ class SeleniumDriver():
             self.log.info(element_not_found_message(locator_type, locator))
             return False
 
-
     def wait_for_element(self, locator, locator_type='id',
-                         timeout=10, poll_frequency=0.5):
+                         timeout=10, poll_frequency=1):
         element = None
         try:
             by_type = self.get_by_type(locator_type)
