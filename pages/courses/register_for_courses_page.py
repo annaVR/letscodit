@@ -3,6 +3,7 @@ __author__ = 'anna'
 from base.base_page import BasePage
 from utilities.custom_logger import custom_logger
 import logging
+from utilities.scrap_page_content import get_clean_data
 
 class RegisterForCourses(BasePage):
 
@@ -14,6 +15,7 @@ class RegisterForCourses(BasePage):
         self.driver = driver
 
     #locators
+
     _search_box = "//input[@id='search-courses']"
     _course = "//div[contains(@class, 'course-listing-title') and contains(text(), '{}')]"
     _all_courses = "//div[@class='course-listing-title']"
@@ -24,6 +26,9 @@ class RegisterForCourses(BasePage):
     _verify_cc_button = "//button[@id='verify_cc_btn']"
 
     _invalid_card_message = "//div[contains(text(), 'The card number is invalid.')][2]"
+
+    _courses_titles = "//div[@class='course-listing-title']//text()"
+    _url = "https://letskodeit.teachable.com/courses"
 
     #element actions
     def enter_course_to_search(self, course_name):
@@ -58,6 +63,10 @@ class RegisterForCourses(BasePage):
         self.enter_credit_card_info(card_number, exp_date, cvc)
         self.click_verify_ccard_button()
 
+    def scrap_courses_names(self):
+        courses_names = get_clean_data(self._url, self._courses_titles)
+        return courses_names
+
     #negative test. will return True/False
     #we also want to verify that element not only present but displayed on the page(not hidden)
     def verify_card_invalid_error(self):
@@ -65,4 +74,5 @@ class RegisterForCourses(BasePage):
                                                 poll_frequency=1, locator_type='XPATH')
         error = self.is_element_displayed(locator=self._invalid_card_message, locator_type='XPATH')
         return error
+
 
