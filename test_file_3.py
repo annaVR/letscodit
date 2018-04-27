@@ -7,7 +7,7 @@ import os
 
 url = 'https://letskodeit.teachable.com/'
 
-# driver_location = '/Users/anna/bin/chromedriver'
+# driver_location = '/home/anna/bin/chromedriver'
 # os.environ['webdriver.chrome.driver'] = driver_location
 # driver = webdriver.Chrome(driver_location)
 
