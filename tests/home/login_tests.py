@@ -5,7 +5,7 @@ import unittest
 import pytest
 from utilities.test_status import testStatus
 
-@pytest.mark.usefulfixture('module_set_up_level_to_test_a_class', 'method_set_up')
+@pytest.mark.usefixtures('module_set_up_level_to_test_a_class', 'method_set_up')
 class LoginTests(unittest.TestCase):
 
 
